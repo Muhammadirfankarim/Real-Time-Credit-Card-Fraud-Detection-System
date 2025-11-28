@@ -18,7 +18,11 @@
       "Bash(npx next start -p 3001)",
       "Bash(npx next start:*)",
       "Bash(timeout:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []

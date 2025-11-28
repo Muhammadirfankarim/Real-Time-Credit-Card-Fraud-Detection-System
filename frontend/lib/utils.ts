@@ -6,4 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Re-export utilities from utils/index
-export { formatPercentage, formatCurrency, formatNumber } from './utils/index';
+export {
+  formatPercentage,
+  formatCurrency,
+  formatNumber,
+  getRiskLevel,
+  getRiskColor,
+  getPredictionColor,
+  getPredictionBorderColor
+} from './utils/index';
