@@ -29,4 +29,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:${PORT}/health')" || exit 1
 
 # Run the application
-CMD cd api && uvicorn main_mlflow:app --host 0.0.0.0 --port ${PORT}
+CMD ["sh", "-c", "cd api && uvicorn main_mlflow:app --host 0.0.0.0 --port ${PORT}"]
