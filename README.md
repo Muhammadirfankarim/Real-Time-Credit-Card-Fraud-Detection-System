@@ -76,7 +76,7 @@ graph TD
     subgraph "Production (Cloud)"
         User["User / Client"] -->|HTTPS| FE["Next.js Frontend (Vercel)"]
         FE -->|JSON Request| API
-        API["FastAPI Backend (Render)"] -->|Prediction| FE
+        API["FastAPI Backend (Railway)"] -->|Prediction| FE
     end
 ```
 
@@ -92,7 +92,7 @@ graph TD
 | **ML Model** | LightGBM, Scikit-learn | Fraud Detection Algorithm |
 | **Tracking** | MLflow | Experiment Tracking & Registry |
 | **Model Store** | Hugging Face Hub | Cloud Model Storage |
-| **Deployment** | Vercel (Frontend), Render (Backend) | Cloud Hosting |
+| **Deployment** | Vercel (Frontend), Railway (Backend) | Cloud Hosting |
 
 ---
 
@@ -143,21 +143,23 @@ npm run dev
 
 ## 🌐 **Deployment**
 
-### **1. Backend (Render.com)**
-1. Create a new **Web Service** on Render.
-2. Connect this repository.
-3. Set **Build Command**: `pip install -r requirements.txt`
-4. Set **Start Command**: `uvicorn main_mlflow:app --host 0.0.0.0 --port $PORT`
-5. Add Environment Variables:
+### **1. Backend (Railway.app)**
+1. Login to [Railway](https://railway.app/).
+2. **New Project** → **Deploy from GitHub repo**.
+3. Select `Real-Time-Credit-Card-Fraud-Detection-System`.
+4. Go to **Settings** → **Root Directory**: Set to `/api`.
+5. Go to **Variables** and add:
    - `MODEL_SOURCE`: `huggingface`
    - `HF_MODEL_REPO`: `irfankarim/fraud-detection-lightgbm-v1`
    - `HF_TOKEN`: `[Your Hugging Face Token]`
+   - `PORT`: `8000`
+6. Railway will automatically detect the `Procfile` and deploy.
 
 ### **2. Frontend (Vercel)**
 1. Import this repository to Vercel.
 2. Set **Root Directory** to `frontend`.
 3. Add Environment Variable:
-   - `NEXT_PUBLIC_API_URL`: `[Your Render Backend URL]`
+   - `NEXT_PUBLIC_API_URL`: `[Your Railway Backend URL]`
 
 ---
 
