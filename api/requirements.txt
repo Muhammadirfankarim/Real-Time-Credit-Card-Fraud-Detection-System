@@ -1,25 +1,25 @@
 # FastAPI Backend Requirements
-# Real-Time Fraud Detection System
-
-# Core FastAPI
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+python-multipart==0.0.6
+python-dotenv==1.0.0
 
 # Data processing
-pandas==2.1.3
-numpy==1.24.3
+pandas==2.2.0
+numpy==1.26.3
 
 # Machine Learning
-scikit-learn==1.3.2
+scikit-learn==1.4.0
 joblib==1.3.2
+lightgbm==4.3.0
 
-# API utilities
-pydantic==2.5.0
-python-multipart==0.0.6
+# MLflow (Required for model loading logic, even if not used for tracking in prod)
+mlflow==2.10.2
 
-# Logging and monitoring
+# Hugging Face (Required for production model loading)
+huggingface-hub>=0.20.0
+
+# System Utilities (Required for Railway/Nixpacks)
+setuptools
 python-json-logger==2.0.7
-
-# Development (optional, untuk local testing)
-pytest==7.4.3
-httpx==0.25.2
