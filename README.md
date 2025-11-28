@@ -64,19 +64,19 @@ This project demonstrates a **production-grade machine learning pipeline** for c
 ```mermaid
 graph TD
     subgraph "Development (Local)"
-        DS[Data Scientist] -->|Trains Model| NB[Jupyter Notebook]
-        NB -->|Logs Metrics & Artifacts| ML[MLflow Local]
+        DS["Data Scientist"] -->|Trains Model| NB["Jupyter Notebook"]
+        NB -->|Logs Metrics & Artifacts| ML["MLflow Local"]
     end
 
     subgraph "Model Serving"
-        ML -->|Uploads Model| HF[Hugging Face Hub]
-        HF -->|Downloads Model| API[FastAPI Backend]
+        ML -->|Uploads Model| HF["Hugging Face Hub"]
+        HF -->|Downloads Model| API["FastAPI Backend"]
     end
 
     subgraph "Production (Cloud)"
-        User[User / Client] -->|HTTPS| FE[Next.js Frontend (Vercel)]
+        User["User / Client"] -->|HTTPS| FE["Next.js Frontend (Vercel)"]
         FE -->|JSON Request| API
-        API[FastAPI Backend (Render)] -->|Prediction| FE
+        API["FastAPI Backend (Render)"] -->|Prediction| FE
     end
 ```
 
