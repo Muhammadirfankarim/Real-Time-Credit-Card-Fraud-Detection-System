@@ -224,12 +224,20 @@ def preprocess_transaction(transaction: Dict[str, float]) -> np.ndarray:
 @app.on_event("startup")
 async def startup_event():
     """Load model on startup."""
+    global model, scaler, model_metadata
     logger.info("Starting Fraud Detection API with MLflow...")
-    success = load_model_from_mlflow()
-    if not success:
-        logger.error("⚠️  API started but model loading failed!")
+    
+    # Use intelligent model loader
+    from model_loader import load_model
+    loaded_data = load_model()
+    
+    if loaded_data:
+        model = loaded_data.get("model")
+        scaler = loaded_data.get("scaler")
+        model_metadata = loaded_data.get("metadata", {})
+        logger.info(f"✅ API ready to serve predictions (Source: {model_metadata.get('source', 'unknown')})")
     else:
-        logger.info("✅ API ready to serve predictions")
+        logger.error("⚠️  API started but model loading failed!")
 
 
 # ============================================================================
