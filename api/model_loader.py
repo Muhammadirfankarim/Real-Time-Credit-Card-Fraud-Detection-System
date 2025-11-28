@@ -60,12 +60,26 @@ def load_model_from_huggingface() -> Optional[Dict[str, Any]]:
     try:
         logger.info(f"📦 Loading model from Hugging Face: {HF_MODEL_REPO}")
         
-        # Download model files from HF Hub
-        model_path = hf_hub_download(
-            repo_id=HF_MODEL_REPO,
-            filename="model.pkl",
-            cache_dir="./hf_cache"
-        )
+        # Try to download model with different possible filenames
+        model_path = None
+        model_filename = None
+        
+        for filename in ["model.pkl", "model.joblib", "fraud_model_lgbm.txt"]:
+            try:
+                model_path = hf_hub_download(
+                    repo_id=HF_MODEL_REPO,
+                    filename=filename,
+                    cache_dir="./hf_cache"
+                )
+                model_filename = filename
+                logger.info(f"✅ Found model file: {filename}")
+                break
+            except Exception:
+                continue
+        
+        if not model_path:
+            logger.error(f"❌ Could not find model file (checked: model.pkl, model.joblib) in {HF_MODEL_REPO}")
+            return None
         
         # Try different scaler filenames (compatibility)
         scaler_path = None
