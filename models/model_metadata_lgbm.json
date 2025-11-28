@@ -1,0 +1,126 @@
+{
+  "model_type": "lightgbm",
+  "model_version": "2.0.0",
+  "created_at": "2025-11-28T13:56:53.515388",
+  "framework": "lightgbm",
+  "framework_version": "4.6.0",
+  "feature_count": 30,
+  "features": [
+    "Time",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6",
+    "V7",
+    "V8",
+    "V9",
+    "V10",
+    "V11",
+    "V12",
+    "V13",
+    "V14",
+    "V15",
+    "V16",
+    "V17",
+    "V18",
+    "V19",
+    "V20",
+    "V21",
+    "V22",
+    "V23",
+    "V24",
+    "V25",
+    "V26",
+    "V27",
+    "V28",
+    "Amount"
+  ],
+  "best_iteration": 14,
+  "performance": {
+    "accuracy": 0.9814964362206383,
+    "precision": 0.07773851590106007,
+    "recall": 0.8979591836734694,
+    "f1_score": 0.14308943089430895,
+    "auc": 0.9328978988894376
+  },
+  "confusion_matrix": {
+    "tn": 55820,
+    "fp": 1044,
+    "fn": 10,
+    "tp": 88
+  },
+  "training_data": {
+    "total_samples": 227845,
+    "fraud_samples": 394,
+    "normal_samples": 227451
+  },
+  "test_data": {
+    "total_samples": 56962,
+    "fraud_samples": 98,
+    "normal_samples": 56864
+  },
+  "feature_importance": [
+    {
+      "feature": "V4",
+      "importance": 11663578000233.742
+    },
+    {
+      "feature": "V14",
+      "importance": 327418449946.40283
+    },
+    {
+      "feature": "V12",
+      "importance": 154682376794.20117
+    },
+    {
+      "feature": "V10",
+      "importance": 3429060827.7998047
+    },
+    {
+      "feature": "Amount",
+      "importance": 1113666481.6015625
+    },
+    {
+      "feature": "V13",
+      "importance": 723938748.5371094
+    },
+    {
+      "feature": "V5",
+      "importance": 614770505.7314453
+    },
+    {
+      "feature": "V26",
+      "importance": 471462682.1035156
+    },
+    {
+      "feature": "V27",
+      "importance": 327292267.3027344
+    },
+    {
+      "feature": "V1",
+      "importance": 316368628.7001953
+    },
+    {
+      "feature": "V22",
+      "importance": 315826672.7998047
+    },
+    {
+      "feature": "V9",
+      "importance": 312011420.80078125
+    },
+    {
+      "feature": "V8",
+      "importance": 297607114.0996094
+    },
+    {
+      "feature": "V21",
+      "importance": 291986018.4033203
+    },
+    {
+      "feature": "V11",
+      "importance": 276044022.5
+    }
+  ]
+}

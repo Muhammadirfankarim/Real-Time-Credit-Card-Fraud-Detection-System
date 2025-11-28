@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(streamlit run:*)",
+      "Bash(ping:*)",
+      "Bash(curl:*)",
+      "Bash(python main.py:*)",
+      "Bash(tree:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(npx create-next-app@latest frontend --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --eslint)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx next start -p 3001)",
+      "Bash(npx next start:*)",
+      "Bash(timeout:*)",
+      "Bash(python:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

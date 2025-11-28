@@ -1,0 +1,145 @@
+name: Model Training & Deployment
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy model after training'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+  # Scheduled training (weekly on Sunday at 00:00 UTC)
+  schedule:
+    - cron: '0 0 * * 0'
+
+  # Trigger on push to main (optional - remove if too frequent)
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'data/**'
+  #     - 'notebooks/04_train_with_mlflow.py'
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true  # Pull LFS files if using Git LFS
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy scikit-learn lightgbm mlflow matplotlib
+          pip install onnxmltools onnx onnxruntime
+
+      - name: Download dataset (if not in repo)
+        run: |
+          # If dataset is not committed (too large), download from Kaggle
+          # Requires KAGGLE_USERNAME and KAGGLE_KEY secrets
+          if [ ! -f data/creditcard.csv ]; then
+            echo "Dataset not found, downloading..."
+            pip install kaggle
+            mkdir -p ~/.kaggle
+            echo '{"username":"${{ secrets.KAGGLE_USERNAME }}","key":"${{ secrets.KAGGLE_KEY }}"}' > ~/.kaggle/kaggle.json
+            chmod 600 ~/.kaggle/kaggle.json
+            kaggle datasets download -d mlg-ulb/creditcardfraud -p data/ --unzip
+          else
+            echo "Dataset found, skipping download"
+          fi
+
+      - name: Train model with MLflow
+        run: |
+          cd notebooks
+          python 04_train_with_mlflow.py
+
+      - name: Upload MLflow artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: mlflow-artifacts
+          path: |
+            mlruns/
+            models/
+
+      - name: Check model performance
+        id: check_performance
+        run: |
+          # Read model metadata and check if performance meets threshold
+          ACCURACY=$(python -c "import json; print(json.load(open('models/model_metadata_mlflow.json'))['performance']['accuracy'])")
+          echo "Model accuracy: $ACCURACY"
+
+          # Set threshold (e.g., 95%)
+          THRESHOLD=0.95
+          if (( $(echo "$ACCURACY > $THRESHOLD" | bc -l) )); then
+            echo "performance_ok=true" >> $GITHUB_OUTPUT
+            echo "✅ Model performance acceptable: $ACCURACY > $THRESHOLD"
+          else
+            echo "performance_ok=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Model performance below threshold: $ACCURACY <= $THRESHOLD"
+          fi
+
+      - name: Create Pull Request (if performance is good)
+        if: steps.check_performance.outputs.performance_ok == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update model with improved performance'
+          title: '🤖 Auto-trained model ready for review'
+          body: |
+            ## Model Training Results
+
+            A new model has been automatically trained and is ready for review.
+
+            **Performance Metrics:**
+            - Accuracy: ${{ steps.check_performance.outputs.accuracy }}
+            - Meets performance threshold: ✅
+
+            **Next Steps:**
+            1. Review the model metrics
+            2. Test the model manually if needed
+            3. Merge this PR to deploy the new model
+
+            **Artifacts:**
+            Check the GitHub Actions run for MLflow artifacts and logs.
+          branch: auto-model-update
+          labels: |
+            automated
+            model-update
+            mlops
+
+      - name: Comment on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '❌ Model Training Failed',
+              body: `Model training workflow failed. Please check the [logs](${context.payload.repository.html_url}/actions/runs/${context.runId}).`,
+              labels: ['bug', 'mlops']
+            })
+
+  notify:
+    needs: train-model
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Send notification (optional)
+        run: |
+          echo "Training completed. Status: ${{ needs.train-model.result }}"
+          # Add Slack/Discord/Email notification here if needed
