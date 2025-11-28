@@ -143,7 +143,7 @@ export interface PredictionResult {
   model_version?: string;
 }
 
-export type RiskLevel = 'VERY_LOW' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
+export type RiskLevel = 'Low' | 'Medium' | 'High';
 
 export interface RiskLevelConfig {
   color: string;
@@ -278,30 +278,20 @@ export interface ModelMetadata {
 // ============================================================================
 
 export const RISK_LEVEL_CONFIG: Record<RiskLevel, RiskLevelConfig> = {
-  VERY_LOW: {
+  Low: {
     color: '#22c55e',
-    message: 'Very Safe Transaction',
+    message: 'Low Risk - Safe Transaction',
     action: 'Automatic processing',
   },
-  LOW: {
-    color: '#86efac',
-    message: 'Safe Transaction',
-    action: 'Automatic processing',
-  },
-  MEDIUM: {
+  Medium: {
     color: '#fb923c',
-    message: 'Requires Attention',
+    message: 'Medium Risk - Requires Attention',
     action: 'Manual review recommended',
   },
-  HIGH: {
+  High: {
     color: '#ef4444',
-    message: 'High Risk',
+    message: 'High Risk - Suspicious',
     action: 'Block and investigate',
-  },
-  VERY_HIGH: {
-    color: '#b91c1c',
-    message: 'Very Dangerous',
-    action: 'Block immediately',
   },
 };
 

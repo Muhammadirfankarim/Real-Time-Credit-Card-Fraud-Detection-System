@@ -42,19 +42,15 @@ interface RiskDistributionProps {
 // ============================================================================
 
 const RISK_COLORS: Record<RiskLevel, string> = {
-  VERY_LOW: 'hsl(142 76% 36%)', // Green
-  LOW: 'hsl(142 70% 45%)', // Light green
-  MEDIUM: 'hsl(48 96% 53%)', // Yellow
-  HIGH: 'hsl(25 95% 53%)', // Orange
-  VERY_HIGH: 'hsl(var(--destructive))', // Red
+  Low: 'hsl(142 70% 45%)', // Green
+  Medium: 'hsl(48 96% 53%)', // Yellow
+  High: 'hsl(25 95% 53%)', // Orange/Red
 };
 
 const RISK_LABELS: Record<RiskLevel, string> = {
-  VERY_LOW: 'Very Low',
-  LOW: 'Low',
-  MEDIUM: 'Medium',
-  HIGH: 'High',
-  VERY_HIGH: 'Very High',
+  Low: 'Low',
+  Medium: 'Medium',
+  High: 'High',
 };
 
 // ============================================================================
@@ -157,8 +153,8 @@ export function RiskDistribution({
     }))
     .filter((item) => item.count > 0) // Only show non-zero slices
     .sort((a, b) => {
-      // Sort by risk level order
-      const order: RiskLevel[] = ['VERY_HIGH', 'HIGH', 'MEDIUM', 'LOW', 'VERY_LOW'];
+      // Sort by risk level order (High to Low)
+      const order: RiskLevel[] = ['High', 'Medium', 'Low'];
       return order.indexOf(a.riskLevel) - order.indexOf(b.riskLevel);
     });
 
@@ -251,13 +247,13 @@ export function RiskDistribution({
             <div className="text-center">
               <p className="text-xs text-muted-foreground">High Risk</p>
               <p className="text-lg font-bold text-destructive">
-                {data.HIGH + data.VERY_HIGH}
+                {data.High || 0}
               </p>
             </div>
             <div className="text-center">
               <p className="text-xs text-muted-foreground">Low Risk</p>
               <p className="text-lg font-bold text-green-600">
-                {data.LOW + data.VERY_LOW}
+                {data.Low || 0}
               </p>
             </div>
           </div>
@@ -276,11 +272,9 @@ export function RiskDistribution({
  */
 export function generateSampleRiskData(): Record<RiskLevel, number> {
   return {
-    VERY_LOW: Math.floor(Math.random() * 100) + 50,
-    LOW: Math.floor(Math.random() * 80) + 40,
-    MEDIUM: Math.floor(Math.random() * 50) + 20,
-    HIGH: Math.floor(Math.random() * 30) + 10,
-    VERY_HIGH: Math.floor(Math.random() * 20) + 5,
+    Low: Math.floor(Math.random() * 100) + 50,
+    Medium: Math.floor(Math.random() * 50) + 20,
+    High: Math.floor(Math.random() * 30) + 10,
   };
 }
 
