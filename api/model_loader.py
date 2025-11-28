@@ -99,7 +99,11 @@ def load_model_from_huggingface() -> Optional[Dict[str, Any]]:
             logger.warning("No scaler found in HF repo, proceeding without scaler")
         
         # Load model and scaler
-        model = joblib.load(model_path)
+        if model_filename.endswith(".txt"):
+            import lightgbm as lgb
+            model = lgb.Booster(model_file=model_path)
+        else:
+            model = joblib.load(model_path)
         scaler = joblib.load(scaler_path) if scaler_path else None
         
         logger.info("✅ Model loaded successfully from Hugging Face")
