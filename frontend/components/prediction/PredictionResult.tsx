@@ -30,9 +30,9 @@ export function PredictionResultDisplay({
 }: PredictionResultDisplayProps) {
   const isFraud = result.prediction === 'Fraud';
 
-  // Defensive: Normalize risk_level to uppercase and fallback to MEDIUM if undefined
-  const normalizedRiskLevel = result.risk_level?.toUpperCase() as RiskLevel || 'MEDIUM';
-  const riskConfig = RISK_LEVEL_CONFIG[normalizedRiskLevel] || RISK_LEVEL_CONFIG['MEDIUM'];
+  // Defensive: Fallback to Medium if risk_level is undefined
+  const normalizedRiskLevel = result.risk_level || 'Medium';
+  const riskConfig = RISK_LEVEL_CONFIG[normalizedRiskLevel] || RISK_LEVEL_CONFIG['Medium'];
 
   // Debug: Log the result to see what API returns
   React.useEffect(() => {
