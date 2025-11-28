@@ -1,5 +1,8 @@
 [phases.setup]
 aptPkgs = ["libgomp1"]
 
+[phases.install]
+cmds = ["apt-get update && apt-get install -y libgomp1"]
+
 [start]
 cmd = "cd api && uvicorn main_mlflow:app --host 0.0.0.0 --port $PORT"
