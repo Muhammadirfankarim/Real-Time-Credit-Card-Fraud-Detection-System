@@ -328,8 +328,26 @@ export class FraudDetectionApiClient {
     }
 
     if (axios.isAxiosError(error)) {
+      let message = defaultMessage;
+      const detail = error.response?.data?.detail;
+
+      if (detail) {
+        if (typeof detail === 'string') {
+          message = detail;
+        } else if (Array.isArray(detail)) {
+          // Handle FastAPI validation errors
+          message = detail
+            .map((e: any) => e.msg || JSON.stringify(e))
+            .join(', ');
+        } else if (typeof detail === 'object') {
+          message = JSON.stringify(detail);
+        }
+      } else if (error.message) {
+        message = error.message;
+      }
+
       return new ApiError(
-        error.response?.data?.detail || error.message || defaultMessage,
+        message,
         error.response?.status || 500,
         error.response?.data
       );
