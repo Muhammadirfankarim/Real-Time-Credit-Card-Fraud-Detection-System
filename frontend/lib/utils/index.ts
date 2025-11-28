@@ -111,11 +111,9 @@ export function formatRelativeTime(date: Date | string): string {
  * Get risk level from fraud probability
  */
 export function getRiskLevel(fraudProbability: number): RiskLevel {
-  if (fraudProbability < 0.1) return 'VERY_LOW';
-  if (fraudProbability < 0.3) return 'LOW';
-  if (fraudProbability < 0.7) return 'MEDIUM';
-  if (fraudProbability < 0.9) return 'HIGH';
-  return 'VERY_HIGH';
+  if (fraudProbability < 0.3) return 'Low';
+  if (fraudProbability < 0.7) return 'Medium';
+  return 'High';
 }
 
 /**
@@ -123,11 +121,9 @@ export function getRiskLevel(fraudProbability: number): RiskLevel {
  */
 export function getRiskColor(riskLevel: RiskLevel): string {
   const colors: Record<RiskLevel, string> = {
-    VERY_LOW: '#22c55e',
-    LOW: '#86efac',
-    MEDIUM: '#fb923c',
-    HIGH: '#ef4444',
-    VERY_HIGH: '#b91c1c',
+    Low: '#22c55e',
+    Medium: '#fb923c',
+    High: '#ef4444',
   };
   return colors[riskLevel];
 }

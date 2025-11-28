@@ -210,10 +210,9 @@ export function getRiskLevelFromIndicators(indicators: RiskIndicators): string {
   const calculator = new RiskIndicatorCalculator();
   const riskScore = calculator.getRiskScore(indicators);
 
-  if (riskScore < 0.2) return 'LOW';
-  if (riskScore < 0.4) return 'MEDIUM';
-  if (riskScore < 0.6) return 'HIGH';
-  return 'VERY_HIGH';
+  if (riskScore < 0.3) return 'Low';
+  if (riskScore < 0.7) return 'Medium';
+  return 'High';
 }
 
 /**

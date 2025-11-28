@@ -113,11 +113,9 @@ export const batchTransactionSchema = z.array(processedTransactionSchema).min(1,
  * Risk Level Schema
  */
 export const riskLevelSchema = z.enum([
-  'VERY_LOW',
-  'LOW',
-  'MEDIUM',
-  'HIGH',
-  'VERY_HIGH',
+  'Low',
+  'Medium',
+  'High',
 ]);
 
 /**

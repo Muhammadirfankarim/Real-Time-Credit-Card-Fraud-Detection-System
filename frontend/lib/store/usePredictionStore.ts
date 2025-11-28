@@ -67,11 +67,9 @@ const initialStats: PredictionStats = {
   normalDetected: 0,
   averageConfidence: 0,
   riskDistribution: {
-    VERY_LOW: 0,
-    LOW: 0,
-    MEDIUM: 0,
-    HIGH: 0,
-    VERY_HIGH: 0,
+    Low: 0,
+    Medium: 0,
+    High: 0,
   },
 };
 
@@ -181,11 +179,9 @@ export const usePredictionStore = create<PredictionState>()(
           normalDetected: 0,
           averageConfidence: 0,
           riskDistribution: {
-            VERY_LOW: 0,
-            LOW: 0,
-            MEDIUM: 0,
-            HIGH: 0,
-            VERY_HIGH: 0,
+            Low: 0,
+            Medium: 0,
+            High: 0,
           },
         };
 
