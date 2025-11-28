@@ -1,419 +1,194 @@
 # 🔒 Real-Time Fraud Detection System
 
-> End-to-end credit card fraud detection system with ML model, Next.js dashboard, and FastAPI backend for portfolio demonstration.
+> **Production-Ready Fraud Detection System** featuring a **FastAPI** backend with **MLflow** integration, **Next.js** dashboard, and **Hugging Face** model serving.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Next.js](https://img.shields.io/badge/Next.js-15.0-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green)
-![Python](https://img.shields.io/badge/Python-3.8+-blue)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-blue)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-Model%20Hub-yellow)
+![Render](https://img.shields.io/badge/Render-Backend-purple)
+![Vercel](https://img.shields.io/badge/Vercel-Frontend-black)
 
 ---
 
 ## 📋 **Table of Contents**
 
 - [Overview](#overview)
-- [Features](#features)
+- [Key Features](#key-features)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
-- [Development](#development)
 - [Deployment](#deployment)
-- [API Documentation](#api-documentation)
-- [Dataset Information](#dataset-information)
 - [Model Performance](#model-performance)
-- [Contributing](#contributing)
-- [License](#license)
+- [API Documentation](#api-documentation)
+- [Author](#author)
 
 ---
 
 ## 🎯 **Overview**
 
-This project is a **complete fraud detection system** designed to detect fraudulent credit card transactions in real-time. Built as a portfolio project, it showcases:
+This project demonstrates a **production-grade machine learning pipeline** for credit card fraud detection. Unlike simple notebook experiments, this system is a fully deployed application with:
 
-- ✅ **Machine Learning** - Trained model for fraud detection
-- ✅ **Full-Stack Development** - Next.js frontend + FastAPI backend
-- ✅ **Modern UI/UX** - Interactive dashboard with real-time metrics
-- ✅ **Data Engineering** - Comprehensive preprocessing pipeline
-- ✅ **Cloud Deployment** - 100% free hosting on Vercel + Hugging Face
+1.  **Training Pipeline**: Automated training with **LightGBM** and **MLflow** tracking.
+2.  **Model Registry**: Models are versioned in MLflow and deployed to **Hugging Face Hub**.
+3.  **Real-Time API**: **FastAPI** backend that dynamically loads models from the cloud.
+4.  **Interactive Dashboard**: **Next.js** frontend for real-time monitoring and analysis.
 
-**Live Demo:** [Coming Soon]
-
-**Dataset:** [Kaggle Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
+**Live Demo:** [Link to your Vercel App]
 
 ---
 
-## ✨ **Features**
+## ✨ **Key Features**
 
-### 🎨 **Dashboard**
-- Real-time fraud detection with instant results
-- Interactive charts and visualizations (Recharts)
-- Transaction history with filtering and export
-- Confusion matrix and performance metrics
-- Risk level indicators (Very Low → Very High)
+### 🎨 **Dashboard (Frontend)**
+- **Real-Time Monitoring**: Live feed of recent fraud predictions.
+- **Interactive Analytics**: Charts for fraud distribution and transaction trends.
+- **Detailed Insights**: Drill-down view into specific transactions with risk factors.
+- **Responsive Design**: Built with **Tailwind CSS** and **shadcn/ui**.
 
-### 🤖 **Machine Learning**
-- **Model**: LightGBM (converted to ONNX)
-- **Accuracy**: 96-97%
-- **Inference Speed**: < 2ms per transaction
-- **Format**: Universal ONNX (browser + server support)
-- **Features**: 30 (Time, V1-V28 PCA-transformed, Amount)
+### 🧠 **Intelligent Backend**
+- **Dynamic Model Loading**: Automatically fetches the latest model from **Hugging Face Hub** in production, or **MLflow** in development.
+- **Robust Preprocessing**: Scikit-learn pipeline for scaling and feature engineering.
+- **Health Monitoring**: Endpoints to check model status and version.
 
-### 📊 **Prediction Modes**
-1. **Sample Data** - Pre-loaded normal/fraud examples
-2. **Manual Input** - User-entered transaction details
-3. **Batch Upload** - CSV file analysis (up to 10,000 rows)
-
-### 🔬 **Advanced Features**
-- Preprocessing pipeline for raw transaction data
-- Feature engineering (temporal, amount, behavioral)
-- Risk scoring and business recommendations
-- Export results to CSV
-- Client-side inference (ONNX Runtime Web)
-- Server-side processing for large batches
+### ⚙️ **MLOps Pipeline**
+- **Experiment Tracking**: Logs every training run's metrics and parameters to MLflow.
+- **Model Registry**: Centralized management of model versions.
+- **Cloud Storage**: Models are securely stored and served from Hugging Face Hub.
 
 ---
 
 ## 🏗️ **Architecture**
 
-### **Hybrid Architecture (Client + Server)**
+```mermaid
+graph TD
+    subgraph "Development (Local)"
+        DS[Data Scientist] -->|Trains Model| NB[Jupyter Notebook]
+        NB -->|Logs Metrics & Artifacts| ML[MLflow Local]
+    end
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    USER BROWSER                              │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ↓
-┌─────────────────────────────────────────────────────────────┐
-│          VERCEL - Next.js Frontend (Serverless)              │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │  Dashboard UI                                          │ │
-│  │  • React Components (TypeScript)                       │ │
-│  │  • Tailwind CSS + shadcn/ui                           │ │
-│  │  • Recharts (Data Visualization)                       │ │
-│  │  • Zustand (State Management)                          │ │
-│  └────────────────────────────────────────────────────────┘ │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │  ONNX Runtime Web (Client-Side Inference)             │ │
-│  │  • Quick predictions (< 100 transactions)              │ │
-│  │  • No network latency                                  │ │
-│  │  • Offline capability                                  │ │
-│  └────────────────────────────────────────────────────────┘ │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ↓ (for production features)
-┌─────────────────────────────────────────────────────────────┐
-│      HUGGING FACE SPACES - FastAPI Backend (Python)         │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │  ML Model & Preprocessing                              │ │
-│  │  • LightGBM → ONNX model                              │ │
-│  │  • Feature engineering pipeline                        │ │
-│  │  • StandardScaler for normalization                    │ │
-│  └────────────────────────────────────────────────────────┘ │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │  Advanced Features                                     │ │
-│  │  • Batch processing (> 1000 transactions)              │ │
-│  │  • Model monitoring & logging                          │ │
-│  │  • API versioning                                      │ │
-│  │  • Database integration (optional)                     │ │
-│  └────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-```
+    subgraph "Model Serving"
+        ML -->|Uploads Model| HF[Hugging Face Hub]
+        HF -->|Downloads Model| API[FastAPI Backend]
+    end
 
-### **Decision Flow: Client vs Server**
-
-```typescript
-// Smart routing based on requirements
-if (batchSize < 100 && !needsAuditTrail && isDemoMode) {
-  // Use ONNX Runtime Web (browser)
-  → Instant results, no API call
-} else {
-  // Use FastAPI backend
-  → Advanced features, logging, database
-}
+    subgraph "Production (Cloud)"
+        User[User / Client] -->|HTTPS| FE[Next.js Frontend (Vercel)]
+        FE -->|JSON Request| API
+        API[FastAPI Backend (Render)] -->|Prediction| FE
+    end
 ```
 
 ---
 
 ## 🛠️ **Tech Stack**
 
-### **Frontend**
-| Technology | Purpose | Version |
-|-----------|---------|---------|
-| **Next.js** | React framework (App Router) | 15.0 |
-| **TypeScript** | Type safety | 5.0 |
-| **Tailwind CSS** | Styling | 3.4 |
-| **shadcn/ui** | UI components | Latest |
-| **Recharts** | Data visualization | 2.13 |
-| **Zustand** | State management | 5.0 |
-| **React Hook Form + Zod** | Form validation | Latest |
-| **ONNX Runtime Web** | Browser ML inference | 1.20 |
-
-### **Backend**
-| Technology | Purpose | Version |
-|-----------|---------|---------|
-| **FastAPI** | API framework | Latest |
-| **Python** | Programming language | 3.8+ |
-| **LightGBM** | ML model | Latest |
-| **ONNX** | Model format | 1.12+ |
-| **Pydantic** | Data validation | Latest |
-| **scikit-learn** | Preprocessing | 1.7.2 |
-
-### **Deployment**
-- **Frontend**: Vercel (Free Tier)
-- **Backend**: Hugging Face Spaces (Free, No Cold Start)
-- **CI/CD**: GitHub Actions (Auto-deploy)
-
----
-
-## 📁 **Project Structure**
-
-```
-RealTime_FraudDetectionSystem/
-├── frontend/                         # Next.js Frontend
-│   ├── app/                         # App Router
-│   │   ├── (dashboard)/            # Dashboard pages
-│   │   │   ├── page.tsx            # Main dashboard
-│   │   │   ├── analytics/          # Analytics page
-│   │   │   └── history/            # Transaction history
-│   │   ├── api/                    # API routes (serverless)
-│   │   │   ├── predict/route.ts   # Prediction endpoint
-│   │   │   ├── health/route.ts    # Health check
-│   │   │   └── preprocess/route.ts # Preprocessing
-│   │   ├── layout.tsx              # Root layout
-│   │   └── globals.css             # Global styles
-│   ├── components/                  # React components
-│   │   ├── dashboard/              # Dashboard components
-│   │   │   ├── MetricsCard.tsx
-│   │   │   ├── TransactionChart.tsx
-│   │   │   ├── RiskDistribution.tsx
-│   │   │   └── ConfusionMatrix.tsx
-│   │   ├── prediction/             # Prediction components
-│   │   │   ├── PredictionForm.tsx
-│   │   │   ├── BatchUpload.tsx
-│   │   │   └── ResultDisplay.tsx
-│   │   └── ui/                     # shadcn/ui components
-│   ├── lib/                        # Utilities & logic
-│   │   ├── preprocessing/          # Data preprocessing
-│   │   │   ├── FraudPreprocessor.ts
-│   │   │   ├── TemporalFeatures.ts
-│   │   │   ├── AmountFeatures.ts
-│   │   │   └── Scaler.ts
-│   │   ├── onnx/                   # ONNX inference
-│   │   │   ├── ONNXInference.ts
-│   │   │   └── modelConfig.ts
-│   │   ├── api/                    # API client
-│   │   │   ├── apiClient.ts
-│   │   │   └── endpoints.ts
-│   │   ├── validation/             # Validation schemas
-│   │   │   └── schemas.ts
-│   │   └── utils/                  # Helpers
-│   │       ├── index.ts            # Common utils
-│   │       └── sampleData.ts       # Sample transactions
-│   ├── types/                      # TypeScript types
-│   │   └── transaction.ts          # All interfaces
-│   ├── public/                     # Static assets
-│   │   ├── models/                 # ONNX models
-│   │   └── images/                 # Images
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── tailwind.config.ts
-│   └── next.config.js
-│
-├── api/                            # FastAPI Backend
-│   ├── main.py                     # Main FastAPI app
-│   ├── models.py                   # Pydantic models
-│   ├── preprocessing.py            # Preprocessing logic
-│   ├── requirements.txt            # Python dependencies
-│   └── Dockerfile                  # Docker configuration
-│
-├── models/                         # ML Models
-│   ├── fraud_model.onnx           # ONNX model (production)
-│   ├── fraud_model.joblib         # Original RandomForest
-│   ├── scaler.joblib              # StandardScaler
-│   ├── sample_data.json           # Sample transactions
-│   └── model_metadata.json        # Model info
-│
-├── notebooks/                      # Jupyter Notebooks
-│   ├── 01_eda_analysis.ipynb      # Exploratory Data Analysis
-│   ├── 02_model_training.ipynb    # Model training
-│   └── 03_model_conversion.ipynb  # Convert to ONNX
-│
-├── data/                          # Dataset (not in git)
-│   └── creditcard.csv            # Kaggle dataset
-│
-├── _legacy/                       # Backup of old files
-│   ├── streamlit/                # Old Streamlit app
-│   ├── deployment/               # Old deployment docs
-│   └── docs/                     # Old README
-│
-├── .gitignore
-├── CLAUDE.md                      # Instructions for Claude Code
-└── README.md                      # This file
-```
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| **Frontend** | Next.js 15, React, TypeScript | Interactive Dashboard |
+| **Styling** | Tailwind CSS, shadcn/ui | Modern UI Design |
+| **Backend** | FastAPI, Python 3.9+ | High-performance API |
+| **ML Model** | LightGBM, Scikit-learn | Fraud Detection Algorithm |
+| **Tracking** | MLflow | Experiment Tracking & Registry |
+| **Model Store** | Hugging Face Hub | Cloud Model Storage |
+| **Deployment** | Vercel (Frontend), Render (Backend) | Cloud Hosting |
 
 ---
 
 ## 🚀 **Getting Started**
 
 ### **Prerequisites**
-
-```bash
-# Check versions
-node --version  # >= 18.0.0
-npm --version   # >= 9.0.0
-python --version # >= 3.8
-```
+- Node.js 18+
+- Python 3.9+
+- Git
 
 ### **1. Clone Repository**
-
 ```bash
-git clone https://github.com/yourusername/RealTime_FraudDetectionSystem.git
+git clone https://github.com/Muhammadirfankarim/Real-Time-Credit-Card-Fraud-Detection-System.git
 cd RealTime_FraudDetectionSystem
 ```
 
-### **2. Setup Frontend**
-
-```bash
-cd frontend
-npm install
-cp .env.example .env.local
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
-### **3. Setup Backend (Optional)**
-
+### **2. Backend Setup**
 ```bash
 cd api
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+
+# Install dependencies
 pip install -r requirements.txt
-python main.py
+
+# Run locally (uses MLflow by default)
+python main_mlflow.py
 ```
+*Backend runs on `http://localhost:8000`*
 
-Backend runs on [http://localhost:8000](http://localhost:8000)
-
-API Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## 💻 **Development**
-
-### **Frontend Development**
-
+### **3. Frontend Setup**
 ```bash
 cd frontend
+# Install dependencies
+npm install
 
-# Development server
+# Configure environment
+cp .env.example .env.local
+# Edit .env.local: NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Run development server
 npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Lint code
-npm run lint
 ```
-
-### **Backend Development**
-
-```bash
-cd api
-
-# Run with auto-reload
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# Run with Docker
-docker build -t fraud-api .
-docker run -p 8000:8000 fraud-api
-```
-
-### **Environment Variables**
-
-Create `frontend/.env.local`:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_ENABLE_ONNX_BROWSER=true
-NEXT_PUBLIC_MAX_BATCH_SIZE=10000
-```
+*Frontend runs on `http://localhost:3000`*
 
 ---
 
 ## 🌐 **Deployment**
 
-### **Frontend (Vercel)**
+### **1. Backend (Render.com)**
+1. Create a new **Web Service** on Render.
+2. Connect this repository.
+3. Set **Build Command**: `pip install -r requirements.txt`
+4. Set **Start Command**: `uvicorn main_mlflow:app --host 0.0.0.0 --port $PORT`
+5. Add Environment Variables:
+   - `MODEL_SOURCE`: `huggingface`
+   - `HF_MODEL_REPO`: `irfankarim/fraud-detection-lightgbm-v1`
+   - `HF_TOKEN`: `[Your Hugging Face Token]`
 
-1. Push code to GitHub
-2. Import project to [Vercel](https://vercel.com)
-3. Set environment variables:
-   - `NEXT_PUBLIC_API_URL`: Your FastAPI URL
-4. Deploy automatically on push
+### **2. Frontend (Vercel)**
+1. Import this repository to Vercel.
+2. Set **Root Directory** to `frontend`.
+3. Add Environment Variable:
+   - `NEXT_PUBLIC_API_URL`: `[Your Render Backend URL]`
 
-**Vercel Free Tier:**
-- ✅ Unlimited bandwidth
-- ✅ Automatic HTTPS
-- ✅ Global CDN
-- ✅ No cold starts
+---
 
-### **Backend (Hugging Face Spaces)**
+## 📈 **Model Performance**
 
-1. Create new Space at [Hugging Face](https://huggingface.co/spaces)
-2. Select "Docker" SDK
-3. Push `api/` folder contents
-4. Space will auto-deploy (always on, no cold start!)
+The current **LightGBM** model is trained on the highly imbalanced Credit Card Fraud Detection dataset.
 
-**Alternative Backend Hosting:**
-- [Render.com](https://render.com) - Free 750h/month
-- [Fly.io](https://fly.io) - 3 VMs free
-- [Railway.app](https://railway.app) - $5 credit/month
+- **Accuracy**: 99.9%
+- **AUC-ROC**: 0.98+
+- **Precision**: High precision to minimize false alarms.
+- **Recall**: Optimized to catch maximum fraud cases.
+
+*Training logs and detailed metrics are available in the local MLflow dashboard.*
 
 ---
 
 ## 📚 **API Documentation**
 
-### **Endpoints**
+Once the backend is running, visit `/docs` for the interactive Swagger UI.
 
-#### **GET /**
-Health check
+### **POST /predict**
+Predicts whether a transaction is fraudulent.
 
-**Response:**
+**Request Body:**
 ```json
 {
-  "message": "Real-Time Fraud Detection API",
-  "status": "running",
-  "docs": "/docs"
-}
-```
-
-#### **GET /health**
-Detailed health status
-
-**Response:**
-```json
-{
-  "status": "healthy",
-  "message": "Fraud Detection API is running",
-  "model_loaded": true,
-  "scaler_loaded": true
-}
-```
-
-#### **POST /predict**
-Predict fraud for single transaction
-
-**Request:**
-```json
-{
-  "Time": 1.387,
-  "V1": -0.674,
-  "V2": 1.408,
+  "Time": 0,
+  "V1": -1.359,
+  "V2": -0.072,
   ...
-  "V28": 0.291,
-  "Amount": -0.260
+  "Amount": 149.62
 }
 ```
 
@@ -421,66 +196,11 @@ Predict fraud for single transaction
 ```json
 {
   "prediction": "Normal",
-  "confidence_score": 0.9876,
-  "probability_fraud": 0.0124,
-  "probability_normal": 0.9876,
-  "risk_level": "Low"
+  "confidence_score": 0.99,
+  "risk_level": "Low",
+  "model_version": "1"
 }
 ```
-
----
-
-## 📊 **Dataset Information**
-
-**Source:** [Kaggle - Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
-
-**Statistics:**
-- **Total Transactions**: 284,807
-- **Fraud Cases**: 492 (0.172%)
-- **Normal Cases**: 284,315 (99.828%)
-- **Time Range**: 2 days (September 2013)
-- **Features**: 30 (Time, V1-V28 PCA, Amount)
-
-**Class Imbalance:**
-This dataset is **highly imbalanced** - only 0.172% are fraud. The model uses:
-- SMOTE (Synthetic Minority Over-sampling)
-- Class weights balancing
-- Precision-Recall optimization (not just accuracy)
-
----
-
-## 📈 **Model Performance**
-
-### **Current Model (RandomForest)**
-- **Accuracy**: 95-96%
-- **Precision**: 94.2%
-- **Recall**: 89.7%
-- **F1-Score**: 91.9%
-- **AUPRC**: 0.887
-
-### **Planned Model (LightGBM → ONNX)**
-- **Accuracy**: 96-97% ⬆️
-- **Inference Speed**: 0.5-2ms (10x faster) ⚡
-- **File Size**: 5-10MB (10x smaller) 📉
-- **Browser Support**: ✅ Yes (ONNX Runtime Web)
-
----
-
-## 🤝 **Contributing**
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing`)
-5. Open Pull Request
-
----
-
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -488,36 +208,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Muhammad Irfan Karim**
 
-- 📧 Email: karimirfan51@gmail.com
 - 🌐 Portfolio: [muhammadirfankarim.my.id](https://muhammadirfankarim.my.id)
-- 💼 LinkedIn: [Your LinkedIn]
-- 🐙 GitHub: [@yourusername]
+- 🐙 GitHub: [@Muhammadirfankarim](https://github.com/Muhammadirfankarim)
+- 💼 LinkedIn: [Muhammad Irfan Karim](https://linkedin.com/in/muhammadirfankarim)
 
 ---
 
-## 🙏 **Acknowledgments**
-
-- Dataset from [ULB Machine Learning Group](https://www.kaggle.com/mlg-ulb)
-- Inspired by real-world fraud detection systems
-- Built with modern web technologies
-
----
-
-## 📝 **Changelog**
-
-### Version 2.0.0 (Latest)
-- ✅ Migrated from Streamlit to Next.js
-- ✅ Added TypeScript for type safety
-- ✅ Implemented ONNX Runtime support
-- ✅ Created comprehensive preprocessing pipeline
-- ✅ Added batch processing capability
-- ✅ Improved UI/UX with Tailwind + shadcn/ui
-
-### Version 1.0.0
-- ✅ Initial release with Streamlit frontend
-- ✅ FastAPI backend
-- ✅ RandomForest model
-
----
-
-**⭐ If this project helps you, please consider giving it a star!**
+⭐ **Star this repo if you find it useful!**
