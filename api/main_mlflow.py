@@ -187,17 +187,21 @@ mlflow_client = None
 # ============================================================================
 
 def get_risk_level(probability: float) -> str:
-    """Determine risk level based on fraud probability."""
-    if probability >= 0.8:
-        return "VERY_HIGH"
-    elif probability >= 0.6:
-        return "HIGH"
-    elif probability >= 0.4:
-        return "MEDIUM"
-    elif probability >= 0.2:
-        return "LOW"
+    """
+    Determine risk level based on fraud probability.
+    Returns: 'Low', 'Medium', or 'High' to match frontend expectations.
+    
+    Risk Level Mapping:
+    - Low: probability < 0.3 (Normal transactions)
+    - Medium: 0.3 <= probability < 0.7 (Uncertain)
+    - High: probability >= 0.7 (Fraud transactions)
+    """
+    if probability >= 0.7:
+        return "High"
+    elif probability >= 0.3:
+        return "Medium"
     else:
-        return "VERY_LOW"
+        return "Low"
 
 
 
