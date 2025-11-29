@@ -65,8 +65,13 @@ const createApiClient = (): AxiosInstance => {
       // Add timestamp to all requests
       config.headers['X-Request-Time'] = new Date().toISOString();
 
-      // Log request in development
-      if (process.env.NODE_ENV === 'development') {
+      // Log request (always log for debugging 422 errors)
+      if (config.url === '/predict' && config.data) {
+        const fieldCount = typeof config.data === 'object' ? Object.keys(config.data).length : 0;
+        const sampleKeys = typeof config.data === 'object' ? Object.keys(config.data).slice(0, 5) : [];
+        console.log(`[API] POST /predict - Fields: ${fieldCount}, Sample: ${sampleKeys.join(', ')}`);
+        console.log('[API] Full payload:', config.data);
+      } else if (process.env.NODE_ENV === 'development') {
         console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`, {
           data: config.data,
           params: config.params,
