@@ -219,20 +219,25 @@ async def debug_validate(request: Request):
         }
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict_fraud(transaction: TransactionInput):
+async def predict_fraud(transaction: TransactionInput, request: Request):
     """
     Endpoint utama untuk prediksi fraud
-    
+
     Input: TransactionInput (data transaksi)
     Output: PredictionResponse (hasil prediksi + confidence score)
-    
+
     Process:
     1. Validasi input (otomatis oleh Pydantic)
     2. Preprocessing data (scaling)
     3. Prediksi menggunakan model
     4. Format response
     """
-    
+
+    # Log successful request for debugging (first 5 fields)
+    transaction_dict = transaction.dict()
+    sample_keys = list(transaction_dict.keys())[:5]
+    logger.info(f"Prediction request received - sample fields: {sample_keys}, field count: {len(transaction_dict)}")
+
     # Cek apakah model dan scaler sudah dimuat
     if not model_loaded or not scaler_loaded:
         raise HTTPException(
