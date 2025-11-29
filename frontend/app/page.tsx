@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PredictionForm } from '@/components/prediction/PredictionForm';
@@ -29,7 +30,13 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Shield className="h-8 w-8 text-primary" />
+              <Image
+                src="/images/FraudGuard_logo.png"
+                alt="FraudGuard Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
               <div>
                 <h1 className="text-2xl font-bold gradient-text">FraudGuard</h1>
                 <p className="text-xs text-muted-foreground">Real-Time Fraud Protection Powered by AI</p>

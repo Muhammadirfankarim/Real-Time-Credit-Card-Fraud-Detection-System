@@ -19,10 +19,16 @@ export const metadata: Metadata = {
     'TypeScript',
   ],
   authors: [{ name: 'Muhammad Irfan Karim' }],
+  icons: {
+    icon: '/images/FraudGuard_ico.ico',
+    shortcut: '/images/FraudGuard_ico.ico',
+    apple: '/images/FraudGuard_logo.png',
+  },
   openGraph: {
     title: 'FraudGuard - Real-Time Fraud Protection Powered by AI',
     description: 'Advanced AI-powered fraud detection for credit card transactions',
     type: 'website',
+    images: ['/images/FraudGuard_logo.png'],
   },
 };
 

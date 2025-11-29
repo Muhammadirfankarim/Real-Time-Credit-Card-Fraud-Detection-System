@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import Image from 'next/image';
 import { TrendingUp, TrendingDown, AlertTriangle, Shield, Database, Activity, Home } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -69,7 +70,13 @@ export default function DashboardPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Shield className="h-8 w-8 text-primary" />
+              <Image
+                src="/images/FraudGuard_logo.png"
+                alt="FraudGuard Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
               <div>
                 <h1 className="text-2xl font-bold gradient-text">FraudGuard Dashboard</h1>
                 <p className="text-xs text-muted-foreground">Real-Time Analytics & Monitoring</p>
