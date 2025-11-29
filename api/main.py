@@ -13,9 +13,10 @@ Endpoint:
 - GET /health: Status aplikasi dan model
 """
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 import joblib
 import pandas as pd
 import numpy as np
@@ -168,13 +169,54 @@ async def health_check():
     """
     status_msg = "healthy" if (model_loaded and scaler_loaded) else "unhealthy"
     message = "Fraud Detection API is running" if (model_loaded and scaler_loaded) else "Model or scaler not loaded"
-    
+
     return HealthResponse(
         status=status_msg,
         message=message,
         model_loaded=model_loaded,
         scaler_loaded=scaler_loaded
     )
+
+@app.post("/debug/validate")
+async def debug_validate(request: Request):
+    """
+    Debug endpoint to inspect raw request data
+    This helps diagnose validation issues
+    """
+    try:
+        body = await request.json()
+
+        # Check which fields are present
+        expected_fields = [
+            'Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
+            'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
+            'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount'
+        ]
+
+        missing_fields = [field for field in expected_fields if field not in body]
+        extra_fields = [field for field in body.keys() if field not in expected_fields]
+
+        # Check data types
+        type_issues = {}
+        for field, value in body.items():
+            if field in expected_fields:
+                if not isinstance(value, (int, float)):
+                    type_issues[field] = f"Expected number, got {type(value).__name__}: {value}"
+
+        return {
+            "received_fields": list(body.keys()),
+            "field_count": len(body),
+            "missing_fields": missing_fields,
+            "extra_fields": extra_fields,
+            "type_issues": type_issues,
+            "sample_values": {k: body[k] for k in list(body.keys())[:5]},  # First 5 values
+            "is_valid": len(missing_fields) == 0 and len(type_issues) == 0
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "message": "Failed to parse request body"
+        }
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict_fraud(transaction: TransactionInput):
@@ -237,6 +279,36 @@ async def predict_fraud(transaction: TransactionInput):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error dalam prediksi: {str(e)}"
         )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """
+    Custom exception handler untuk validation errors (422)
+    Logs detailed information about what fields are missing or invalid
+    """
+    # Log the validation error details
+    logger.error(f"Validation error on {request.url.path}")
+    logger.error(f"Error count: {len(exc.errors())}")
+
+    # Format error message for response
+    error_messages = []
+    for error in exc.errors():
+        field = " -> ".join(str(x) for x in error.get("loc", []))
+        message = error.get("msg", "Unknown error")
+        error_type = error.get("type", "unknown")
+        error_messages.append(f"{field}: {message} (type: {error_type})")
+
+        # Log each error
+        logger.error(f"  Field '{field}': {message} [{error_type}]")
+
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "error": "ValidationError",
+            "message": "Invalid input data. Please check all required fields.",
+            "detail": "; ".join(error_messages)
+        }
+    )
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):

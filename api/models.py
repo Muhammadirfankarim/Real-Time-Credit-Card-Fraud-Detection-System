@@ -54,6 +54,10 @@ class TransactionInput(BaseModel):
     V28: float = Field(..., description="PCA feature V28")
     
     class Config:
+        # Allow both str and float to handle JSON number parsing issues
+        # Pydantic will coerce strings to floats automatically
+        validate_assignment = True
+
         schema_extra = {
             "example": {
                 "Time": 406.0,
