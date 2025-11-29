@@ -31,8 +31,8 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <Shield className="h-8 w-8 text-primary" />
               <div>
-                <h1 className="text-2xl font-bold gradient-text">Fraud Detection System</h1>
-                <p className="text-xs text-muted-foreground">Real-Time ML-Powered Analysis</p>
+                <h1 className="text-2xl font-bold gradient-text">FraudGuard</h1>
+                <p className="text-xs text-muted-foreground">Real-Time Fraud Protection Powered by AI</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -55,10 +55,10 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-            Detect Fraud in Real-Time
+            Protect Your Business from Fraud
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Advanced machine learning powered fraud detection for credit card transactions.
+            FraudGuard uses advanced AI to detect fraudulent credit card transactions in real-time.
             Process and analyze transactions instantly with{' '}
             <span className="text-primary font-semibold">
               {formatPercentage(FRAUD_MODEL_METADATA.accuracy)}

@@ -1,6 +1,6 @@
-# 🔒 Real-Time Fraud Detection System
+# 🛡️ FraudGuard
 
-> **Production-Ready Fraud Detection System** featuring a **FastAPI** backend with **MLflow** integration, **Next.js** dashboard, and **Hugging Face** model serving.
+> **Real-Time Fraud Protection Powered by AI** - Production-ready fraud detection system featuring **FastAPI** backend with **MLflow** integration, **Next.js** dashboard, and **Hugging Face** model serving.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Next.js](https://img.shields.io/badge/Next.js-15.0-black)
@@ -28,7 +28,7 @@
 
 ## 🎯 **Overview**
 
-This project demonstrates a **production-grade machine learning pipeline** for credit card fraud detection. Unlike simple notebook experiments, this system is a fully deployed application with:
+**FraudGuard** is a **production-grade machine learning system** for real-time credit card fraud detection. Unlike simple notebook experiments, this is a fully deployed application with:
 
 1.  **Training Pipeline**: Automated training with **LightGBM** and **MLflow** tracking.
 2.  **Model Registry**: Models are versioned in MLflow and deployed to **Hugging Face Hub**.

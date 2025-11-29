@@ -1,8 +1,8 @@
 """
-FastAPI Backend with MLflow Integration
+FraudGuard API - FastAPI Backend with MLflow Integration
 ========================================
 
-Real-Time Fraud Detection API with MLflow model serving:
+Real-Time Fraud Protection Powered by AI:
 - Load models from MLflow Model Registry
 - Health checks with model version info
 - Preprocessing and prediction
@@ -143,8 +143,8 @@ class ModelInfo(BaseModel):
 # ============================================================================
 
 app = FastAPI(
-    title="Fraud Detection API with MLflow",
-    description="Real-time credit card fraud detection powered by MLflow",
+    title="FraudGuard API",
+    description="Real-Time Fraud Protection Powered by AI - Advanced fraud detection for credit card transactions",
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -248,7 +248,7 @@ async def startup_event():
 async def root():
     """Root endpoint."""
     return {
-        "message": "Fraud Detection API with MLflow",
+        "message": "FraudGuard API - Real-Time Fraud Protection Powered by AI",
         "version": "2.0.0",
         "docs": "/docs",
         "health": "/health"

@@ -71,7 +71,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <Shield className="h-8 w-8 text-primary" />
               <div>
-                <h1 className="text-2xl font-bold gradient-text">Fraud Detection Dashboard</h1>
+                <h1 className="text-2xl font-bold gradient-text">FraudGuard Dashboard</h1>
                 <p className="text-xs text-muted-foreground">Real-Time Analytics & Monitoring</p>
               </div>
             </div>

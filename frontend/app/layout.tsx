@@ -6,9 +6,9 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Fraud Detection System - Real-Time Credit Card Fraud Detection',
+  title: 'FraudGuard - Real-Time Fraud Protection Powered by AI',
   description:
-    'Advanced ML-powered fraud detection system for credit card transactions. Built with Next.js, TypeScript, and ONNX Runtime.',
+    'FraudGuard: Advanced AI-powered fraud detection system for credit card transactions. Real-time protection with machine learning. Built with Next.js, TypeScript, and ONNX Runtime.',
   keywords: [
     'fraud detection',
     'machine learning',
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Muhammad Irfan Karim' }],
   openGraph: {
-    title: 'Fraud Detection System',
-    description: 'Real-Time Credit Card Fraud Detection with ML',
+    title: 'FraudGuard - Real-Time Fraud Protection Powered by AI',
+    description: 'Advanced AI-powered fraud detection for credit card transactions',
     type: 'website',
   },
 };
