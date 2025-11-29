@@ -119,9 +119,29 @@ const createApiClient = (): AxiosInstance => {
         throw new ApiError('Server error. Please try again later.', error.response.status);
       }
 
+      // Handle 422 validation errors and other client errors
+      const responseData = error.response.data as any;
+      let errorMessage = error.message;
+
+      if (responseData) {
+        // Try different error message formats
+        if (typeof responseData.message === 'string') {
+          errorMessage = responseData.message;
+          // Add detail if available
+          if (responseData.detail) {
+            errorMessage += `\n${responseData.detail}`;
+          }
+        } else if (typeof responseData.detail === 'string') {
+          errorMessage = responseData.detail;
+        } else if (typeof responseData.error === 'string') {
+          errorMessage = responseData.error;
+        }
+      }
+
       throw new ApiError(
-        (error.response.data as { detail?: string })?.detail || error.message,
-        error.response.status
+        errorMessage,
+        error.response.status,
+        responseData
       );
     }
   );
