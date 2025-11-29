@@ -89,7 +89,7 @@ class TransactionInput(BaseModel):
     V26: float
     V27: float
     V28: float
-    Amount: float = Field(..., description="Transaction amount", ge=0)
+    Amount: float = Field(..., description="Transaction amount (can be negative if already scaled)")
 
     class Config:
         json_schema_extra = {
